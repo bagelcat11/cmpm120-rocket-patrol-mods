@@ -61,10 +61,10 @@ class Play extends Phaser.Scene {
         // delayedCall = oneshot timer
         // time (ms), callback func, args to callback, context 
         scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(3000, () => {
+        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(w / 2, h / 2, "GAME OVER", scoreConfig).setOrigin(0.5);
-            this.add.text(w / 2, h / 2 + 64, "Press (R) to Restart", scoreConfig)
-                .setOrigin(0.5);
+            this.add.text(w / 2, h / 2 + 64, "Press (R) to Restart or ← for Menu",
+                scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
     }
@@ -72,7 +72,12 @@ class Play extends Phaser.Scene {
     update() {
         // check for game restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyRESET)) {
+            this.sound.play("sfx-select");
             this.scene.restart();
+        }
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+            this.sound.play("sfx-select");
+            this.scene.start("menuScene");
         }
         
         // scroll BG
@@ -124,5 +129,6 @@ class Play extends Phaser.Scene {
         // update score
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
+        this.sound.play("sfx-explode");
     }
 }

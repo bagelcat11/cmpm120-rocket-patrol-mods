@@ -5,7 +5,7 @@ class Ship extends Phaser.GameObjects.Sprite {
         // add self to scene when instantiated
         scene.add.existing(this);
         this.points = pointValue;
-        this.moveSpeed = 3; // px/frame
+        this.moveSpeed = game.settings.shipSpeed; // px/frame
     }
 
     update() {
