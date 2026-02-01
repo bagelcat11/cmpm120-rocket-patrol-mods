@@ -1,3 +1,13 @@
+/*
+    Lynn Gen
+    [Rocket Patrol Mods Title TBD]
+    Time spent: X
+    Mods:
+        - x
+    Citations:
+        - x
+*/
+
 let config = {
     type: Phaser.AUTO,
     width: 640,
