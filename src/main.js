@@ -3,6 +3,7 @@
     [Rocket Patrol Mods Title TBD]
     Time spent: X
     Mods:
+        - (5 pts) Mouse control for player movement and mouseclick to fire\
         - x
     Citations:
         - x

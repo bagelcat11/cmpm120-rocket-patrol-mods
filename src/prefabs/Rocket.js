@@ -11,24 +11,27 @@ class Rocket extends Phaser.GameObjects.Sprite {
         // since Rocket is an instantiated scene, we need to
         // make bindings for sounds from the passed-in Play scene
         this.sfxShot = scene.sound.add("sfx-shoot");
+
+        // since we are using a listener, we can just define this function in
+        // the constructor and not need it in update()
+        scene.input.on("pointerdown", (pointer) => {
+            console.log("firing");
+            if (!this.isFiring) {
+                this.isFiring = true;
+                this.sfxShot.play();
+            }
+        });
+        // allow pointer to be referenced for movement
+        this.pointer = scene.input.activePointer;
     }
 
     update() {
-        // move horizontally if not firing and not going offscreen
-        if (!this.isFiring) {
-            if (keyLEFT.isDown && this.x >= borderUISize + this.width) {
-                this.x -= this.moveSpeed;
-            } else if (keyRIGHT.isDown &&
-                    this.x <= game.config.width - borderUISize - this.width) {
-                this.x += this.moveSpeed;
-            }
+        // move horizontally by tracking mouse if not firing and not going offscreen
+        if (!this.isFiring && this.pointer.x > borderUISize + this.width &&
+                this.pointer.x < game.config.width - borderUISize - this.width) {
+            this.x = this.pointer.x;
         }
 
-        // fire and move ship
-        if (Phaser.Input.Keyboard.JustDown(keyFIRE) && !this.isFiring) {
-            this.isFiring = true;
-            this.sfxShot.play();
-        }
         if (this.isFiring && this.y >= borderUISize * 3 + borderPadding) {
             this.y -= this.moveSpeed;
         }

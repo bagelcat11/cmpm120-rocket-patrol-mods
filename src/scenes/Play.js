@@ -34,8 +34,9 @@ class Play extends Phaser.Scene {
         this.add.rectangle(w - borderUISize, 0, borderUISize, h, WHITE).setOrigin(0, 0);
 
         // define keybinds
-        keyFIRE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
+        // firing and moving are done with the mouse and handled in the Rocket class
         keyRESET = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        // L/R are just for UI selection
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
