@@ -3,10 +3,12 @@
     [Rocket Patrol Mods Title TBD]
     Time spent: X
     Mods:
-        - (5 pts) Mouse control for player movement and mouseclick to fire\
-        - x
+        - (5 pts) Mouse control for player movement and mouseclick to fire
+        - (5 pts) Particle explosion when rocket hits ship
     Citations:
-        - x
+        - Particle explosion:
+            Modified from Phaser Examples "Explode Test"
+            https://phaser.io/examples/v3.55.0/game-objects/particle-emitter/view/explode-test
 */
 
 let config = {

@@ -15,7 +15,6 @@ class Rocket extends Phaser.GameObjects.Sprite {
         // since we are using a listener, we can just define this function in
         // the constructor and not need it in update()
         scene.input.on("pointerdown", (pointer) => {
-            console.log("firing");
             if (!this.isFiring) {
                 this.isFiring = true;
                 this.sfxShot.play();

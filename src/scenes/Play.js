@@ -68,6 +68,26 @@ class Play extends Phaser.Scene {
                 scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
+
+        // create particle emitter for extra explosion effect
+        // modified from Phaser Examples "Explode Test"
+        // https://phaser.io/examples/v3.55.0/game-objects/particle-emitter/view/explode-test
+
+        // really this is just a config object because when we want the emitter
+        // to trigger, we just add it to the scene and call start(),
+        // so that will be done in shipExplode() and we will pass this
+        this.particlesConfig = {
+            scale: {start: 4, end: 0},
+            speed: {min: -400, max: 400},
+            angle: {min: 0, max: 360},
+            tint: {start: 0xFF0000, end: 0x0000FF},
+            blendMode: 'SCREEN',
+            count: 1,
+            frequency: 25,
+            lifespan: 2000,
+            gravityY: 400,
+            duration: 100,
+        };
     }
 
     update() {
@@ -120,12 +140,20 @@ class Play extends Phaser.Scene {
         ship.alpha = 0;
         let explosion = this.add.sprite(ship.x, ship.y, "explosion").setOrigin(0, 0);
         explosion.anims.play("explode");
-        // callback after animation ends
+        let particles = this.add.particles(ship.x, ship.y, "particle",
+            this.particlesConfig);
+        particles.start();
+        
+        // callback after explosion animation ends
         explosion.on("animationcomplete", () => {
             ship.reset();
             ship.alpha = 1;
             explosion.destroy();
         })
+        // callback after particle emission ends
+        particles.on("complete", () => {
+            particles.destroy();
+        });
 
         // update score
         this.p1Score += ship.points;

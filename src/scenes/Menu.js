@@ -13,6 +13,7 @@ class Menu extends Phaser.Scene {
             startFrame: 0,
             endFrame: 3
         });
+        this.load.image("particle", "./assets/particle.png");
         this.load.audio("sfx-select", "./assets/select.wav");
         this.load.audio("sfx-explode", "./assets/explode.wav");
         this.load.audio("sfx-shoot", "./assets/shoot.wav");
