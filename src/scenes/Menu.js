@@ -19,23 +19,26 @@ class Menu extends Phaser.Scene {
     }
 
     create() {
-        // configure anim
-        this.anims.create({
-            key: "explode",
-            frames: this.anims.generateFrameNumbers("explosion", {
-                start: 0, end: 3, first: 0
-            }),
-            frameRate: 15
-        });
-        // new ship (alien) anim
-        this.anims.create({
-            key: "alienMove",
-            frames: this.anims.generateFrameNumbers("ship", {
-                start: 0, end: 1, first: 0
-            }),
-            frameRate: 4,
-            repeat: -1  // forever
-        });
+        // only make keys if they don't already exist
+        if (!this.anims.exists("explode")) {
+            // configure anim
+            this.anims.create({
+                key: "explode",
+                frames: this.anims.generateFrameNumbers("explosion", {
+                    start: 0, end: 3, first: 0
+                }),
+                frameRate: 15
+            });
+            // new ship (alien) anim
+            this.anims.create({
+                key: "alienMove",
+                frames: this.anims.generateFrameNumbers("ship", {
+                    start: 0, end: 1, first: 0
+                }),
+                frameRate: 4,
+                repeat: -1  // forever
+            });
+        }
 
         let menuConfig = {
             fontFamily: "Courier",
@@ -68,24 +71,26 @@ class Menu extends Phaser.Scene {
         // make keys for particle effects for timer change
         // renderTexture reference modified from:
         // https://phaser.io/examples/v3.85.0/game-objects/render-texture/view/text-to-render-texture
-        let timerModifiers = ["-3", "+1", "+2", "+3"];
-        for (let i of timerModifiers) {
-            let timerChangeText = this.add.text(0, 0, i + " sec", {
-                fontSize: 16,
-                color: "#FACADE",   // oh my god it has to be a string with #
-                fontStyle: "bold",
-                fixedWidth: 70,
-            });
-            if (i === "-3") { timerChangeText.setColor("#FF0000"); }
-            let rt = this.add.renderTexture(0, 0, 100, 15);
-            rt.draw(timerChangeText);
-            rt.saveTexture("timerChange" + i);
-            rt.setVisible(false);
-            timerChangeText.setVisible(false);
-            // console.log("made key timerChange" + i)
-            // console.log(timerChangeText.text);
+        if (!this.textures.exists("timerChange+1")) {
+            let timerModifiers = ["-5", "+1", "+2", "+3"];
+            for (let i of timerModifiers) {
+                let timerChangeText = this.add.text(0, 0, i + " sec", {
+                    fontSize: 16,
+                    color: "#FACADE",   // oh my god it has to be a string with #
+                    fontStyle: "bold",
+                    fixedWidth: 70,
+                });
+                if (i === "-5") { timerChangeText.setColor("#FF0000"); }
+                let rt = this.add.renderTexture(0, 0, 100, 15);
+                rt.draw(timerChangeText);
+                rt.saveTexture("timerChange" + i);
+                rt.setVisible(false);
+                timerChangeText.setVisible(false);
+                // console.log("made key timerChange" + i)
+                // console.log(timerChangeText.text);
+            }
+            // this.add.image(200, 30, "timerChange+3");
         }
-        // this.add.image(200, 30, "timerChange+3");
     }
 
     update() {

@@ -42,10 +42,10 @@ class Rocket extends Phaser.GameObjects.Sprite {
             // subtract time for misses
             let prevTime = this.scene.clock.getRemaining();
             this.scene.clock.reset();
-            this.scene.clock = this.scene.time.delayedCall(prevTime - 3000,
+            this.scene.clock = this.scene.time.delayedCall(prevTime - 5000,
                 this.scene.timerCallback, null, this.scene);
 
-            let timerParticles = this.scene.add.particles(this.x, this.y, "timerChange-3",
+            let timerParticles = this.scene.add.particles(this.x, this.y, "timerChange-5",
                 this.scene.timerParticlesConfig);
             timerParticles.explode();
             timerParticles.on("complete", () => {
