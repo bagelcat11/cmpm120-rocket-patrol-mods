@@ -5,7 +5,7 @@ class Play extends Phaser.Scene {
 
     create() {
         let w = game.config.width, h = game.config.height;
-        let GREEN = 0x00FF00, WHITE = 0xFFFFFF;
+        let BLUE = 0x9977FF, WHITE = 0xFFFFFF;
 
         // add scrolling BG
         // using 'this' means it can be accessed anywhere in the scene
@@ -19,14 +19,17 @@ class Play extends Phaser.Scene {
         // place them offstage in a staggered pattern
         this.ship3 = new Ship(this, w + borderUISize * 6, borderUISize * 4,
             "ship", 0, 30).setOrigin(0, 0);
+        this.ship3.anims.play("alienMove");
         this.ship2 = new Ship(this, w + borderUISize * 3, borderUISize * 5 + borderPadding * 2,
             "ship", 0, 20).setOrigin(0, 0);
+        this.ship2.anims.play("alienMove");
         this.ship1 = new Ship(this, w, borderUISize * 6 + borderPadding * 4,
             "ship", 0, 10).setOrigin(0, 0);
+        this.ship1.anims.play("alienMove");
 
         // add UI BG and borders
         this.add.rectangle(0, borderUISize + borderPadding, w, borderUISize * 2,
-            GREEN).setOrigin(0, 0);
+            BLUE).setOrigin(0, 0);
         
         this.add.rectangle(0, 0, w, borderUISize, WHITE).setOrigin(0, 0);
         this.add.rectangle(0, h - borderUISize, w, borderUISize, WHITE).setOrigin(0, 0);
@@ -45,8 +48,8 @@ class Play extends Phaser.Scene {
         this.scoreConfig = {
             fontFamily: "Courier",
             fontSize: "28px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
+            backgroundColor: "#AA00BB",
+            color: "#FFFFFF",
             align: "right",
             padding: {
                 top: 5,
@@ -61,8 +64,8 @@ class Play extends Phaser.Scene {
         let timerConfig = {
             fontFamily: "Courier",
             fontSize: "28px",
-            backgroundColor: "#F3B141",
-            color: "#843605",
+            backgroundColor: "#AA00BB",
+            color: "#FFFFFF",
             align: "left",
             padding: {
                 top: 5,
@@ -96,8 +99,8 @@ class Play extends Phaser.Scene {
             angle: {min: 0, max: 360},
             tint: {start: 0xFF0000, end: 0x0000FF},
             blendMode: 'SCREEN',
-            count: 2,
-            frequency: 25,
+            count: 4,
+            frequency: 20,
             lifespan: 2000,
             gravityY: 400,
             duration: 100,
@@ -195,7 +198,7 @@ class Play extends Phaser.Scene {
         this.clock = this.time.delayedCall(prevTime + ship.points * 100,
             this.timerCallback, null, this);
 
-        let timerParticles = this.add.particles(ship.x, ship.y, "timerChange+" + ship.points / 10,
+        let timerParticles = this.add.particles(ship.x + 32, ship.y + 16, "timerChange+" + ship.points / 10,
             this.timerParticlesConfig);
         timerParticles.explode();
         timerParticles.on("complete", () => {

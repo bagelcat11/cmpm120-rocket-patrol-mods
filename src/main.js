@@ -1,7 +1,7 @@
 /*
     Lynn Gen
-    [Rocket Patrol Mods Title TBD]
-    Time spent: X
+    Cosmic Crusaders Patrol (Legally Distinct)
+    Time spent: 7 hrs
     Mods:
         - (5 pts) Mouse control for player movement and mouseclick to fire
         - (5 pts) Particle explosion when rocket hits ship
