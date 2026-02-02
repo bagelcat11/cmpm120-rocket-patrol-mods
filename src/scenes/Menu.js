@@ -56,6 +56,28 @@ class Menu extends Phaser.Scene {
         // different key definitions in different scene!!
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
+
+        // make keys for particle effects for timer change
+        // renderTexture reference modified from:
+        // https://phaser.io/examples/v3.85.0/game-objects/render-texture/view/text-to-render-texture
+        let timerModifiers = ["-3", "+1", "+2", "+3"];
+        for (let i of timerModifiers) {
+            let timerChangeText = this.add.text(0, 0, i + " sec", {
+                fontSize: 16,
+                color: "#FACADE",   // oh my god it has to be a string with #
+                fontStyle: "bold",
+                fixedWidth: 70,
+            });
+            if (i === "-3") { timerChangeText.setColor("#FF0000"); }
+            let rt = this.add.renderTexture(0, 0, 100, 15);
+            rt.draw(timerChangeText);
+            rt.saveTexture("timerChange" + i);
+            rt.setVisible(false);
+            timerChangeText.setVisible(false);
+            // console.log("made key timerChange" + i)
+            // console.log(timerChangeText.text);
+        }
+        // this.add.image(200, 30, "timerChange+3");
     }
 
     update() {

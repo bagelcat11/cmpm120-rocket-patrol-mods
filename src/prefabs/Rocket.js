@@ -44,6 +44,14 @@ class Rocket extends Phaser.GameObjects.Sprite {
             this.scene.clock.reset();
             this.scene.clock = this.scene.time.delayedCall(prevTime - 3000,
                 this.scene.timerCallback, null, this.scene);
+
+            let timerParticles = this.scene.add.particles(this.x, this.y, "timerChange-3",
+                this.scene.timerParticlesConfig);
+            timerParticles.explode();
+            timerParticles.on("complete", () => {
+                timerParticles.destroy();
+            });
+
             this.reset();
         }
     }

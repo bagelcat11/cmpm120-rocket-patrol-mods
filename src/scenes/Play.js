@@ -105,11 +105,12 @@ class Play extends Phaser.Scene {
 
         // create config for timer change text particle
         this.timerParticlesConfig = {
-            speed: -100,
-            angle: 0,
+            alpha: {start: 1, end: 0},
+            speed: 50,
+            angle: -90,
             count: 1,
             // frequency: 25,
-            lifespan: 2000,
+            lifespan: 1000,
             // gravityY: 400,
             duration: 1000,
         }
@@ -194,25 +195,12 @@ class Play extends Phaser.Scene {
         this.clock = this.time.delayedCall(prevTime + ship.points * 100,
             this.timerCallback, null, this);
 
-        // particle effect for timer change
-        // renderTexture reference modified from:
-        // https://phaser.io/examples/v3.85.0/game-objects/render-texture/view/text-to-render-texture
-        let timerChangeText = this.add.text(0, 0, ship.points / 10 + " sec")
-            .setFontSize(14)
-            .setColor(0xFACADE);
-        timerChangeText.setVisible(false);
-        let rt = this.add.renderTexture(ship.x, ship.y - 50);
-        rt.draw(timerChangeText, 0, 0);
-        // rt.setVisible(false);
-        rt.saveTexture("timerChange");
-
-        let timerParticles = this.add.particles(ship.x, ship.y - 50, "timerChange",
+        let timerParticles = this.add.particles(ship.x, ship.y, "timerChange+" + ship.points / 10,
             this.timerParticlesConfig);
-        timerParticles.start();
+        timerParticles.explode();
         timerParticles.on("complete", () => {
             timerParticles.destroy();
         });
-
     }
 
     // making this defined instead of anonymous bc it needs to be used when
