@@ -6,8 +6,13 @@
         - (5 pts) Mouse control for player movement and mouseclick to fire
         - (5 pts) Particle explosion when rocket hits ship
         - (5 pts) Add time to clock on successful hit (1 sec per 10 pts)
-                    and subtract time for misses (-3 sec)
+                    and subtract time for misses (-5 sec)
         - (3 pts) Onscreen timer
+        - (3 pts) [S-Tier] Text particle effect when gaining/losing time
+                    (programmatically generated with renderTexture objects)
+
+        - I also changed the look of the game in some minor ways that did not
+            count for points, just for fun :3
     Citations:
         - Particle explosion:
             Modified from Phaser Examples "Explode Test"
