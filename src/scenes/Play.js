@@ -42,7 +42,7 @@ class Play extends Phaser.Scene {
 
         // setup score
         this.p1Score = 0;
-        let scoreConfig = {
+        this.scoreConfig = {
             fontFamily: "Courier",
             fontSize: "28px",
             backgroundColor: "#F3B141",
@@ -55,19 +55,33 @@ class Play extends Phaser.Scene {
             fixedWidth: 100
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding,
-            borderUISize + borderPadding * 2, this.p1Score, scoreConfig);
+            borderUISize + borderPadding * 2, this.p1Score, this.scoreConfig);
+        
+        // setup timer display
+        let timerConfig = {
+            fontFamily: "Courier",
+            fontSize: "28px",
+            backgroundColor: "#F3B141",
+            color: "#843605",
+            align: "left",
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: 100
+        }
+        this.timerDisplay = this.add.text(game.config.width - borderUISize - borderPadding -
+            timerConfig.fixedWidth, borderUISize + borderPadding * 2,
+            game.settings.gameTimer, timerConfig);
+
         
         // setup timer, game end
         this.gameOver = false;
         // delayedCall = oneshot timer
         // time (ms), callback func, args to callback, context 
-        scoreConfig.fixedWidth = 0;
-        this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
-            this.add.text(w / 2, h / 2, "GAME OVER", scoreConfig).setOrigin(0.5);
-            this.add.text(w / 2, h / 2 + 64, "Press (R) to Restart or ← for Menu",
-                scoreConfig).setOrigin(0.5);
-            this.gameOver = true;
-        }, null, this);
+        this.scoreConfig.fixedWidth = 0;
+        this.clock = this.time.delayedCall(game.settings.gameTimer, this.timerCallback,
+            null, this);
 
         // create particle emitter for extra explosion effect
         // modified from Phaser Examples "Explode Test"
@@ -82,12 +96,23 @@ class Play extends Phaser.Scene {
             angle: {min: 0, max: 360},
             tint: {start: 0xFF0000, end: 0x0000FF},
             blendMode: 'SCREEN',
-            count: 1,
+            count: 2,
             frequency: 25,
             lifespan: 2000,
             gravityY: 400,
             duration: 100,
         };
+
+        // create config for timer change text particle
+        this.timerParticlesConfig = {
+            speed: -100,
+            angle: 0,
+            count: 1,
+            // frequency: 25,
+            lifespan: 2000,
+            // gravityY: 400,
+            duration: 1000,
+        }
     }
 
     update() {
@@ -124,6 +149,9 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship1);
             this.p1.reset();
         }
+
+        // update timer display
+        this.timerDisplay.text = Math.ceil(this.clock.getRemainingSeconds());
     }
 
     // helper Axis-Aligned Bounding Boxes collision checker
@@ -159,5 +187,41 @@ class Play extends Phaser.Scene {
         this.p1Score += ship.points;
         this.scoreLeft.text = this.p1Score;
         this.sound.play("sfx-explode");
+
+        // add extra time (1 sec per each 10 pts)
+        let prevTime = this.clock.getRemaining();
+        this.clock.reset();
+        this.clock = this.time.delayedCall(prevTime + ship.points * 100,
+            this.timerCallback, null, this);
+
+        // particle effect for timer change
+        // renderTexture reference modified from:
+        // https://phaser.io/examples/v3.85.0/game-objects/render-texture/view/text-to-render-texture
+        let timerChangeText = this.add.text(0, 0, ship.points / 10 + " sec")
+            .setFontSize(14)
+            .setColor(0xFACADE);
+        timerChangeText.setVisible(false);
+        let rt = this.add.renderTexture(ship.x, ship.y - 50);
+        rt.draw(timerChangeText, 0, 0);
+        // rt.setVisible(false);
+        rt.saveTexture("timerChange");
+
+        let timerParticles = this.add.particles(ship.x, ship.y - 50, "timerChange",
+            this.timerParticlesConfig);
+        timerParticles.start();
+        timerParticles.on("complete", () => {
+            timerParticles.destroy();
+        });
+
+    }
+
+    // making this defined instead of anonymous bc it needs to be used when
+    // updating the timer with hits/misses as well
+    timerCallback() {
+        let w = game.config.width, h = game.config.height;
+        this.add.text(w / 2, h / 2, "GAME OVER", this.scoreConfig).setOrigin(0.5);
+            this.add.text(w / 2, h / 2 + 64, "Press (R) to Restart or ← for Menu",
+                this.scoreConfig).setOrigin(0.5);
+            this.gameOver = true;
     }
 }

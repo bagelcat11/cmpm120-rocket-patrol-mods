@@ -5,6 +5,8 @@ class Rocket extends Phaser.GameObjects.Sprite {
     
         // Add self to scene when instantiated
         scene.add.existing(this);
+        // allow scene access
+        this.scene = scene;
         this.isFiring = false;
         this.moveSpeed = 2; // px/frame
 
@@ -37,6 +39,11 @@ class Rocket extends Phaser.GameObjects.Sprite {
 
         // reset on miss
         if (this.y <= borderUISize * 3 + borderPadding) {
+            // subtract time for misses
+            let prevTime = this.scene.clock.getRemaining();
+            this.scene.clock.reset();
+            this.scene.clock = this.scene.time.delayedCall(prevTime - 3000,
+                this.scene.timerCallback, null, this.scene);
             this.reset();
         }
     }
